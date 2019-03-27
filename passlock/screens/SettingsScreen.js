@@ -1,14 +1,30 @@
 import React from 'react';
-import { ExpoConfigView } from '@expo/samples';
+import { ScrollView, StyleSheet, Text, Button } from 'react-native';
+import Firebase from 'firebase';
 
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
-    title: 'app.json',
+    title: 'Settings',
+  };
+
+  onSignOutPress = () =>{
+    Firebase.auth().signOut();
   };
 
   render() {
-    /* Go ahead and delete ExpoConfigView and replace it with your
-     * content, we just wanted to give you a quick view of your config */
-    return <ExpoConfigView />;
+    return (
+      <ScrollView style={styles.container}>
+        <Text>hello</Text>
+        <Button title="Sign out" onPress={this.onSignOutPress} ></Button>
+      </ScrollView>
+    );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 15,
+    backgroundColor: '#fff',
+  },
+});
