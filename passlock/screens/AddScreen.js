@@ -37,7 +37,8 @@ export default class AddScreen extends React.Component {
   };
 
   generate = () => {
-    this.setState({password: "some random stuff"});
+    let x = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    this.setState({password: x});
   };
 
   render() {

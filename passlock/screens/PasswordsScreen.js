@@ -4,9 +4,12 @@ import {
   Text,
   ScrollView,
   Button,
+  Clipboard,
+  Alert,
+  TouchableHighlight
 } from 'react-native';
 import Firebase from 'firebase';
-import { Card } from 'galio-framework'
+import { Card, Block } from 'galio-framework'
 import { _TESTING_ONLY_reset_container_count } from 'react-navigation/src/createNavigationContainer';
 
 
@@ -43,7 +46,12 @@ export default class PasswordsScreen extends React.Component {
   render() {
     const listPasswords = this.state.data.map((data) => {
       return (
-        <Card title={data.website} caption={data.password} style={styles.card} ></Card>
+        <TouchableHighlight underlayColor="#96e6ff" onPress={() => {
+          Clipboard.setString(data.password);
+          Alert.alert("password for " + data.website +" copied to your clipboard");
+        }} >
+        <Card title={data.website} style={styles.card} ></Card>
+        </TouchableHighlight>
       )
     })
     return (
