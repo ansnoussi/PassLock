@@ -3,9 +3,11 @@ import {
   StyleSheet,
   Text,
   ScrollView,
+  Button,
 } from 'react-native';
 import Firebase from 'firebase';
 import { Card } from 'galio-framework'
+import { _TESTING_ONLY_reset_container_count } from 'react-navigation/src/createNavigationContainer';
 
 
 
@@ -13,9 +15,7 @@ export default class PasswordsScreen extends React.Component {
 
   constructor(props){
     super(props);
-    this.state = {
-      passwords: []
-    }
+    this.state = { data: [{website: "facebook" , password: "1234"} , {website: "google", password: "mypassword"}] };
   };
 
 
@@ -25,11 +25,15 @@ export default class PasswordsScreen extends React.Component {
   };
   
   getUserData = () => {
-    let userId = Firebase.auth().currentUser.uid;
-    let ref = Firebase.database().ref('users/' + userId);
-    ref.on('value', snapshot => {
-      const state = snapshot.val();
-      this.setState(state);
+    let databaseRef = Firebase.database().ref('users/' + Firebase.auth().currentUser.uid);
+
+    databaseRef.on('value', (snapshot) => {
+      const newState = snapshot.val();
+      let data = [];
+      Object.entries(newState).map(([key,value]) => {
+        data.push({password: key, website: value})
+      });
+      this.setState(data);
     });
   }
 
@@ -39,14 +43,18 @@ export default class PasswordsScreen extends React.Component {
   
 
   render() {
-    const { passwords } = this.state;
-    const listPasswords = passwords.map( password => <Card neutral  style={styles.card} title={password.website} aption="click to copy the password" />)
+    const listPasswords = this.state.data.map((data) => {
+      return (
+        <Card title={data.website} caption={data.password} style={styles.card} ></Card>
+      )
+    })
     return (
       <ScrollView style={styles.container}>
         <Text>Passwords for user {Firebase.auth().currentUser.uid}:</Text>
         <Card neutral  style={styles.card} title="hello1" caption="hello2"/>
         <Card neutral  style={styles.card} title="hello1" caption="hello2"/>
         {listPasswords}
+        <Button title="refresh" onPress={this.getUserData}></Button>
       </ScrollView>
     );
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, Button,Alert } from 'react-native';
+import { ScrollView, StyleSheet, Text, Button,Alert, View } from 'react-native';
 import Firebase from 'firebase';
 import { Input } from 'galio-framework'
 
@@ -18,20 +18,27 @@ export default class AddScreen extends React.Component {
   };
 
 
-  writeUserData = () => {
-    Firebase.database().ref('users/' + Firebase.auth().currentUser.uid).set(this.state);
-  }
 
   handleSubmit = () => {
-    Alert.alert("good")
+    Firebase.database().ref('users/' + Firebase.auth().currentUser.uid).push({
+      website : this.state.website,
+      password: this.state.password,
+    }).then(() => {
+      Alert.alert("saved");
+      this.setState({website: "", password: ""});
+    } , (error) => {
+      Alert.alert(error.message)
+    });
+    
   };
 
   render() {
     return (
       <ScrollView style={styles.container}>
         <Text>enter your input:</Text>
-        <Input placeholder="website" onChangeText={(text) => this.setState({website: text})} />
-        <Input placeholder="password" onChangeText={(text) => this.setState({password: text})} />
+        <Input placeholder="website" onChangeText={(text) => this.setState({website: text})} value={this.state.website} />
+        <Input placeholder="password" onChangeText={(text) => this.setState({password: text})} value={this.state.password}  />
+        <Button title="generate password"  onPress={() =>{this.setState({password: "yay"})}}/>
         <Button title="submit" onPress={this.handleSubmit} />
       </ScrollView>
     );
