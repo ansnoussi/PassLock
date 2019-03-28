@@ -14,7 +14,7 @@ export default class SettingsScreen extends React.Component {
   render() {
     return (
       <ScrollView style={styles.container}>
-        <Text>hello</Text>
+        <Text>good bye :) </Text>
         <Button title="Sign out" onPress={this.onSignOutPress} ></Button>
       </ScrollView>
     );
