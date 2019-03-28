@@ -6,6 +6,7 @@ import ApiKeys from './constants/ApiKeys.js';
 import Firebase from 'firebase';
 import MainTabNavigator from './navigation/MainTabNavigator';
 
+console.disableYellowBox = true;
 
 export default class App extends React.Component {
 
